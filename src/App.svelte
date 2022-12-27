@@ -1,30 +1,36 @@
 <script lang="ts">
-	export let name: string;
+    import { onMount } from "svelte";
+    import Currency from "./components/Currency.svelte";
+
+	let info = {}
+	let infoKeys = []
+
+	onMount(async () => {
+		const response: Response = await fetch('https://www.cbr-xml-daily.ru/daily_json.js')
+		const data = await response.json()
+		const currency = data['Valute']
+		for (const key in currency) {
+			info[`${key}`] = currency[key]
+			infoKeys = [...infoKeys, key]
+		}
+	})
+
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#each infoKeys as key}
+		<Currency name={info[key]['Name']} />
+	{/each}
 </main>
 
 <style>
 	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
+		width: 1200px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		
 	}
 </style>
