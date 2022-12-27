@@ -1,63 +1,50 @@
 <script lang="ts">
     export let currencyInfo;
+
 </script>
 
 <div class="currency">
+    <div class="charcode">{currencyInfo['CharCode']}</div>
+    <div class="nominal">{currencyInfo['Nominal']}</div>
     <div class="name">{currencyInfo['Name']}</div>
-    <div class="charcode">Букв. код: <span>{currencyInfo['CharCode']}</span></div>
-    <div class="numcode">Цифр. код: <span>{currencyInfo['NumCode']}</span></div>
-    <div class="nominal">Единиц: <span>{currencyInfo['Nominal']}</span></div>
-    <div class="value {currencyInfo['Previous'] > currencyInfo['Value'] ? 'green' : 'red'}">Курс: <span>{currencyInfo['Value']}</span></div>
+    <div class="value">{currencyInfo['Value']}</div>
+    <div class="changes">{currencyInfo['Changes'] > 0 ? '+' : ''}{currencyInfo['Changes']}</div>   
+    <div class="percent">+0.37%</div> 
     
-
 </div>
 
 <style>
-    :global(body) {
-        background-color: gray;
-    }
     .currency {
-        background-color: purple;
-        color: white;
-        border-radius: 10px;
-        text-align: center;
         display: flex;
         justify-content: space-around;
-        align-items: top;
-        flex-wrap: wrap;
-        margin-top: 20px;
-    }
-
-    span {
-        font-weight: 700;
-    }
-
-    .name {
-        width: 100%;
+        height: 80px;
     }
 
     .charcode {
-        width: 50%;
-    }
-
-    .numcode {
-        width: 50%;
+        width: 55px;
+        color: #8d96b2;
     }
 
     .nominal {
-        width: 50%;
+        width: 71px;
+        color: #8d96b2;
     }
+
+    .name {
+        width: 146px;
+        font-weight: 500;
+    }
+    
 
     .value {
-        width: 50%;
+        width: 146px;
     }
 
-    .red {
-        background-color: red;
+    .changes {
+        width: 146px;
     }
 
-    .green {
-        background-color: green;
+    .percent {
+        width: 146px;
     }
-
 </style>
