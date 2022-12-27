@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { paginate, DarkPaginationNav } from 'svelte-paginate'
 	import Currency from "./components/Currency.svelte";
 
 	let info = {};
-	let infoKeys = [];
+	let infoKeys: string[] = [];
 
 	onMount(async () => {
 		const response: Response = await fetch(
@@ -16,17 +17,39 @@
 			infoKeys = [...infoKeys, key];
 		}
 	});
+
+	$: items = infoKeys
+	let currentPage = 1
+	let pageSize = 5
+	$: paginatedItems = paginate({ items, pageSize, currentPage })
 </script>
 
 <main>
-	{#each infoKeys as key}
+	{#each paginatedItems as key}
 		<Currency currencyInfo={info[key]}/>
 	{/each}
 </main>
 
+<DarkPaginationNav
+  totalItems="{items.length}"
+  pageSize="{pageSize}"
+  currentPage="{currentPage}"
+  limit="{1}"
+  showStepOptions="{true}"
+  on:setPage="{(e) => currentPage = e.detail.page}"
+/>
+
 <style>
 	main {
-		width: 20%;
+		width: 30%;
 		margin: 0 auto;
+	}
+
+	:global(.pagination-nav) {
+		width: 30%;
+		margin: 0 auto;
+		margin-top: 30px;
+		
+		
 	}
 </style>

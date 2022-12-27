@@ -7,7 +7,7 @@
     <div class="charcode">Букв. код: <span>{currencyInfo['CharCode']}</span></div>
     <div class="numcode">Цифр. код: <span>{currencyInfo['NumCode']}</span></div>
     <div class="nominal">Единиц: <span>{currencyInfo['Nominal']}</span></div>
-    <div class="value">Курс: <span>{currencyInfo['Value']}</span></div>
+    <div class="value {currencyInfo['Previous'] > currencyInfo['Value'] ? 'green' : 'red'}">Курс: <span>{currencyInfo['Value']}</span></div>
     
 
 </div>
@@ -50,6 +50,13 @@
 
     .value {
         width: 50%;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+    .green {
         background-color: green;
     }
 
