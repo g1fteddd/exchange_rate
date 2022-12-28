@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { paginate, DarkPaginationNav } from 'svelte-paginate'
+	import { paginate, LightPaginationNav } from "svelte-paginate";
 	import Currency from "./components/Currency.svelte";
 
 	let info = {};
@@ -15,20 +15,23 @@
 		for (const key in currency) {
 			info[`${key}`] = currency[key];
 			infoKeys = [...infoKeys, key];
-			info[`${key}`]['Changes'] = Math.round((info[`${key}`]['Value'] - info[`${key}`]['Previous']) * 10000) / 10000
+			info[`${key}`]["Changes"] =
+				Math.round(
+					(info[`${key}`]["Value"] - info[`${key}`]["Previous"]) *
+						10000
+				) / 10000;
+			// info[`${key}`]['Percent'] =
+			
 		}
 	});
 
-	$: items = infoKeys
-	let currentPage = 1
-	let pageSize = 5
-	$: paginatedItems = paginate({ items, pageSize, currentPage })
+	$: items = infoKeys;
+	let currentPage = 1;
+	let pageSize = 5;
+	$: paginatedItems = paginate({ items, pageSize, currentPage });
 </script>
 
-
-
 <main>
-	
 	<div class="columns">
 		<div class="column_charcode">Код</div>
 		<div class="column_nominal">Номинал</div>
@@ -38,17 +41,16 @@
 		<div class="column_percent">%</div>
 	</div>
 	{#each paginatedItems as key}
-		<Currency currencyInfo={info[key]}/>
+		<Currency currencyInfo={info[key]} id={infoKeys.indexOf(key)} />
 	{/each}
 </main>
 
-<DarkPaginationNav
-  totalItems="{items.length}"
-  pageSize="{pageSize}"
-  currentPage="{currentPage}"
-  limit="{1}"
-  showStepOptions="{true}"
-  on:setPage="{(e) => currentPage = e.detail.page}"
+<LightPaginationNav
+	totalItems={items.length}
+	{pageSize}
+	{currentPage}
+	showStepOptions={true}
+	on:setPage={(e) => (currentPage = e.detail.page)}
 />
 
 <style>
@@ -61,9 +63,11 @@
 		display: flex;
 		justify-content: space-around;
 		color: #8d96b2;
-		height: 45px;
+		height: 30px;
+		font-size: 14px;
+		text-align: center;
+		border-bottom: 1px solid rgba(137, 137, 137, 0.2);
 	}
-
 
 	.column_charcode {
 		width: 55px;
@@ -76,10 +80,6 @@
 	.column_currency {
 		width: 146px;
 	}
-
-	
-	
-	
 
 	.column_value {
 		width: 146px;
@@ -94,12 +94,9 @@
 	}
 
 	:global(.pagination-nav) {
-		width: 30%;
-		margin: 0 auto;
-		margin-top: 30px;
-		
-		
+		position: absolute;
+		bottom: 30%;
+		left: 50%;
+		transform: translate(-50%, -30%);
 	}
-
-
 </style>

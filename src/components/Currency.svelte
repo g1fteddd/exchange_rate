@@ -1,23 +1,25 @@
 <script lang="ts">
     export let currencyInfo;
-
+    export let id;
 </script>
 
-<div class="currency">
-    <div class="charcode">{currencyInfo['CharCode']}</div>
-    <div class="nominal">{currencyInfo['Nominal']}</div>
-    <div class="name">{currencyInfo['Name']}</div>
-    <div class="value">{currencyInfo['Value']}</div>
-    <div class="changes">{currencyInfo['Changes'] > 0 ? '+' : ''}{currencyInfo['Changes']}</div>   
-    <div class="percent">+0.37%</div> 
-    
+<div class="currency {id % 2 !== 0 ? 'gray' : ''}">
+    <div class="charcode"><p>{currencyInfo["CharCode"]}</p></div>
+    <div class="nominal"><p>{currencyInfo["Nominal"]}</p></div>
+    <div class="name"><p>{currencyInfo["Name"]}</p></div>
+    <div class="value"><p>{currencyInfo["Value"]}</p></div>
+    <div class="changes {currencyInfo['Changes'] > 0 ? 'green' : 'red'}">
+        <p>{currencyInfo["Changes"] > 0 ? `+${currencyInfo["Changes"]}` : `${currencyInfo["Changes"]}`}</p>
+    </div>
+    <div class="percent"><p>+0.37%</p></div>
 </div>
 
 <style>
     .currency {
         display: flex;
         justify-content: space-around;
-        height: 80px;
+        font-size: 14px;
+        text-align: center;
     }
 
     .charcode {
@@ -34,7 +36,6 @@
         width: 146px;
         font-weight: 500;
     }
-    
 
     .value {
         width: 146px;
@@ -46,5 +47,22 @@
 
     .percent {
         width: 146px;
+    }
+
+    .green {
+        color: #28bc00;
+    }
+
+    .red {
+        color: #ff564e;
+    }
+
+    .gray {
+        background-color: #f9fafb;
+    }
+
+    .currency:hover {
+        background-color: #ebecee;
+        transition: 0.3s;
     }
 </style>
