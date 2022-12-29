@@ -5,25 +5,42 @@
 
 	let info = {};
 	let infoKeys: string[] = [];
+	let previousInfo = {};
+	let previousInfoKeys: string[] = [];
 
 	onMount(async () => {
-		const response: Response = await fetch(
-			"https://www.cbr-xml-daily.ru/daily_json.js"
-		);
-		const data = await response.json();
-		const currency = data["Valute"];
-		for (const key in currency) {
-			info[`${key}`] = currency[key];
-			infoKeys = [...infoKeys, key];
-			info[`${key}`]["Changes"] =
-				Math.round(
-					(info[`${key}`]["Value"] - info[`${key}`]["Previous"]) *
-						10000
-				) / 10000;
-			// info[`${key}`]['Percent'] =
+		const currentResponse: Response = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
+		const currentData = await currentResponse.json();
+
+		info = {...currentData['Valute']}
+		infoKeys = Object.keys(info)
+
+
+		const previousResponse: Response = await fetch(currentData['PreviousURL']);
+		const previousData = await previousResponse.json();
+
+		previousInfo = {...previousData['Valute']}
+		previousInfoKeys = Object.keys(previousInfo)
+
+
+		for (const key in info) {
+			let previousCurrency = previousInfo[key]['Value']
+			let currentCurrency = info[key]['Value']
+
+			if (previousInfo[key]['Nominal'] !== info[key]['Nominal']) {
+				previousCurrency /= previousInfo[key]['Nominal']
+				currentCurrency /= info[key]['Nominal']
+				info[key]['Changes'] = Math.round((currentCurrency - previousCurrency) * 10000) / 10000
+			} else {
+				info[`${key}`]["Changes"] = Math.round((currentCurrency - previousCurrency) * 10000) / 10000
+			}
+
+			
 			
 		}
 	});
+
+	
 
 	$: items = infoKeys;
 	let currentPage = 1;
