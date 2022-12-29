@@ -8,43 +8,56 @@
 	let previousInfo = {};
 	let previousInfoKeys: string[] = [];
 
-	onMount(async () => {
-		const currentResponse: Response = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
-		const currentData = await currentResponse.json();
+	// округление числа до X знаков после запятой
+	const roundingNumber = (number: number, numberOfDigits: number = 4): number => {
+		return Math.round(number * Math.pow(10, numberOfDigits)) / Math.pow(10, numberOfDigits)
+	}
 
-		info = {...currentData['Valute']}
-		infoKeys = Object.keys(info)
-
-
-		const previousResponse: Response = await fetch(currentData['PreviousURL']);
-		const previousData = await previousResponse.json();
-
-		previousInfo = {...previousData['Valute']}
-		previousInfoKeys = Object.keys(previousInfo)
-
-
-		for (const key in info) {
-			let previousCurrency = previousInfo[key]['Value']
-			let currentCurrency = info[key]['Value']
-
-			if (previousInfo[key]['Nominal'] !== info[key]['Nominal']) {
-				previousCurrency /= previousInfo[key]['Nominal']
-				currentCurrency /= info[key]['Nominal']
-				info[key]['Changes'] = Math.round((currentCurrency - previousCurrency) * 10000) / 10000
-			} else {
-				info[`${key}`]["Changes"] = Math.round((currentCurrency - previousCurrency) * 10000) / 10000
-			}
-
-			
-			
+	// функция для подсчёта процентного изменения числа
+	const percentageСhange = (previousValue: number, currentValue: number): number => {
+		if (currentValue >= previousValue) {
+			const percentageIncrease: number = ((currentValue - previousValue) / previousValue) * 100;
+			return roundingNumber(percentageIncrease, 2)
+		} else {
+			const percentageDecrease: number = ((previousValue - currentValue) / previousValue) * 100 * (-1);
+			return roundingNumber(percentageDecrease, 2)
 		}
-	});
+	};
 
 	
 
+	onMount(async () => {
+		const currentResponse: Response = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
+		const currentData: object = await currentResponse.json();
+
+		info = { ...currentData["Valute"] };
+		infoKeys = Object.keys(info);
+
+		const previousResponse: Response = await fetch(currentData["PreviousURL"]);
+		const previousData: object = await previousResponse.json();
+
+		previousInfo = { ...previousData["Valute"] };
+		previousInfoKeys = Object.keys(previousInfo);
+
+		for (const key in info) {
+			let previousCurrency: number = previousInfo[key]["Value"];
+			let currentCurrency: number = info[key]["Value"];
+
+			if (previousInfo[key]["Nominal"] !== info[key]["Nominal"]) {
+				previousCurrency /= previousInfo[key]["Nominal"];
+				currentCurrency /= info[key]["Nominal"];
+				info[key]["Changes"] = roundingNumber(currentCurrency - previousCurrency, 4)
+				info[key]['Percent'] = percentageСhange(previousCurrency, currentCurrency)
+			} else {
+				info[`${key}`]["Changes"] = roundingNumber(currentCurrency - previousCurrency, 4)
+				info[key]['Percent'] = percentageСhange(previousCurrency, currentCurrency)
+			}
+		}
+	});
+
 	$: items = infoKeys;
-	let currentPage = 1;
-	let pageSize = 5;
+	let currentPage: number = 1;
+	let pageSize: number = 5;
 	$: paginatedItems = paginate({ items, pageSize, currentPage });
 </script>
 
@@ -58,7 +71,7 @@
 		<div class="column_percent">%</div>
 	</div>
 	{#each paginatedItems as key}
-		<Currency currencyInfo={info[key]} id={infoKeys.indexOf(key)} />
+		<Currency currencyInfo={info[key]} index={infoKeys.indexOf(key)} />
 	{/each}
 </main>
 

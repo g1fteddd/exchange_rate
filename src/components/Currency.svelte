@@ -1,17 +1,23 @@
 <script lang="ts">
-    export let currencyInfo;
-    export let id;
+    export let currencyInfo: object;
+    export let index: number;
 </script>
 
-<div class="currency {id % 2 !== 0 ? 'gray' : ''}">
+<div class="currency {index % 2 !== 0 ? 'gray' : ''}">
     <div class="charcode"><p>{currencyInfo["CharCode"]}</p></div>
     <div class="nominal"><p>{currencyInfo["Nominal"]}</p></div>
     <div class="name"><p>{currencyInfo["Name"]}</p></div>
     <div class="value"><p>{currencyInfo["Value"]}</p></div>
-    <div class="changes {currencyInfo['Changes'] > 0 ? 'green' : 'red'}">
-        <p>{currencyInfo["Changes"] > 0 ? `+${currencyInfo["Changes"]}` : `${currencyInfo["Changes"]}`}</p>
+    <div class="changes {currencyInfo['Changes'] >= 0 ? 'green' : 'red'}">
+        <p>
+            {currencyInfo["Changes"] > 0 ? `+${currencyInfo["Changes"]}` : `${currencyInfo["Changes"]}`}
+        </p>
     </div>
-    <div class="percent"><p>+0.37%</p></div>
+    <div class="percent {currencyInfo['Changes'] >= 0 ? 'green' : 'red'}">
+        <p>
+            {currencyInfo["Percent"] >= 0 ? `+${currencyInfo["Percent"]}` : `${currencyInfo["Percent"]}`}%
+        </p>
+    </div>
 </div>
 
 <style>
