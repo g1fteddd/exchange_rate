@@ -9,7 +9,7 @@ const roundingNumber = (number: number, numberOfDigits: number = 4): number => {
 }
 ```
 
-В функции для подсчёта процентного изменения числа происходит проверка на то, какое число больше, исходя из этого мы применяем разные формулы подсчёта
+В функции для подсчёта процентного изменения числа происходит проверка на то, какое число больше, исходя из этого мы применяем разные формулы подсчёта:
 
 ```javascript
 const percentageСhange = (previousValue: number, currentValue: number): number => {
@@ -56,7 +56,7 @@ onMount(async () => {
 });
 ```
 
-Идёт цикл и в пропсах мы передаём информацию о валюте и индекс. Индекс нужен для стилизации.
+Далее идёт цикл и в пропсах мы передаём информацию о валюте и индекс. Индекс нужен для стилизации.
 
 ```javascript
 {#each paginatedItems as key}
@@ -64,7 +64,7 @@ onMount(async () => {
 {/each}
 ```
 
-Для пагинации я использовал пакет svelte-paginate. Переменные которые нужны для пагинации.
+Для пагинации я использовал пакет svelte-paginate. Переменные которые нужны для пагинации:
 
 ```javascript
 $: items = infoKeys;
@@ -73,7 +73,7 @@ let pageSize: number = 5;
 $: paginatedItems = paginate({ items, pageSize, currentPage });
 ```
 
-Компонент для пагинации
+Компонент для пагинации:
 
 ```javascript
 <LightPaginationNav
