@@ -3,9 +3,9 @@
 	import { paginate, LightPaginationNav } from "svelte-paginate";
 	import Currency from "./components/Currency.svelte";
 
-	let info = {};
+	let infoAboutCurrency = {};
 	let infoKeys: string[] = [];
-	let previousInfo = {};
+	let previousInfoAboutCurrency = {};
 	let previousInfoKeys: string[] = [];
 
 	// округление числа до X знаков после запятой
@@ -30,27 +30,27 @@
 		const currentResponse: Response = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
 		const currentData: object = await currentResponse.json();
 
-		info = { ...currentData["Valute"] };
-		infoKeys = Object.keys(info);
+		infoAboutCurrency = { ...currentData["Valute"] };
+		infoKeys = Object.keys(infoAboutCurrency);
 
 		const previousResponse: Response = await fetch(currentData["PreviousURL"]);
 		const previousData: object = await previousResponse.json();
 
-		previousInfo = { ...previousData["Valute"] };
-		previousInfoKeys = Object.keys(previousInfo);
+		previousInfoAboutCurrency = { ...previousData["Valute"] };
+		previousInfoKeys = Object.keys(previousInfoAboutCurrency);
 
-		for (const key in info) {
-			let previousCurrency: number = previousInfo[key]["Value"];
-			let currentCurrency: number = info[key]["Value"];
+		for (const key in infoAboutCurrency) {
+			let previousCurrencyValue: number = previousInfoAboutCurrency[key]["Value"];
+			let currentCurrencyValue: number = infoAboutCurrency[key]["Value"];
 
-			if (previousInfo[key]["Nominal"] !== info[key]["Nominal"]) {
-				previousCurrency /= previousInfo[key]["Nominal"];
-				currentCurrency /= info[key]["Nominal"];
-				info[key]["Changes"] = roundingNumber(currentCurrency - previousCurrency, 4)
-				info[key]['Percent'] = percentageСhange(previousCurrency, currentCurrency)
+			if (previousInfoAboutCurrency[key]["Nominal"] !== infoAboutCurrency[key]["Nominal"]) {
+				previousCurrencyValue /= previousInfoAboutCurrency[key]["Nominal"];
+				currentCurrencyValue /= infoAboutCurrency[key]["Nominal"];
+				infoAboutCurrency[key]["Changes"] = roundingNumber(currentCurrencyValue - previousCurrencyValue, 4)
+				infoAboutCurrency[key]['Percent'] = percentageСhange(previousCurrencyValue, currentCurrencyValue)
 			} else {
-				info[`${key}`]["Changes"] = roundingNumber(currentCurrency - previousCurrency, 4)
-				info[key]['Percent'] = percentageСhange(previousCurrency, currentCurrency)
+				infoAboutCurrency[`${key}`]["Changes"] = roundingNumber(currentCurrencyValue - previousCurrencyValue, 4)
+				infoAboutCurrency[key]['Percent'] = percentageСhange(previousCurrencyValue, currentCurrencyValue)
 			}
 		}
 	});
@@ -71,7 +71,7 @@
 		<div class="column_percent">%</div>
 	</div>
 	{#each paginatedItems as key}
-		<Currency currencyInfo={info[key]} index={infoKeys.indexOf(key)} />
+		<Currency currencyInfo={infoAboutCurrency[key]} index={infoKeys.indexOf(key)} />
 	{/each}
 </main>
 

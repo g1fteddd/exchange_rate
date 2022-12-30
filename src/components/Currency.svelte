@@ -4,10 +4,18 @@
 </script>
 
 <div class="currency {index % 2 !== 0 ? 'gray' : ''}">
-    <div class="charcode"><p>{currencyInfo["CharCode"]}</p></div>
-    <div class="nominal"><p>{currencyInfo["Nominal"]}</p></div>
-    <div class="name"><p>{currencyInfo["Name"]}</p></div>
-    <div class="value"><p>{currencyInfo["Value"]}</p></div>
+    <div class="charcode">
+        <p>{currencyInfo["CharCode"]}</p>
+    </div>
+    <div class="nominal">
+        <p>{currencyInfo["Nominal"]}</p>
+    </div>
+    <div class="name">
+        <p>{currencyInfo["Name"]}</p>
+    </div>
+    <div class="value">
+        <p>{currencyInfo["Value"]}</p>
+    </div>
     <div class="changes {currencyInfo['Changes'] >= 0 ? 'green' : 'red'}">
         <p>
             {currencyInfo["Changes"] > 0 ? `+${currencyInfo["Changes"]}` : `${currencyInfo["Changes"]}`}
