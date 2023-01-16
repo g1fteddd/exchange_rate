@@ -67,12 +67,41 @@ onMount(async () => {
 });
 ```
 
-Далее идёт цикл и в пропсах мы передаём информацию о валюте и индекс. Индекс нужен для стилизации.
+Для стилизации таблицы я использовал Bootstrap:
 
 ```javascript
-{#each paginatedItems as key}
-	<Currency currencyInfo={infoAboutCurrency[key]} index={infoKeys.indexOf(key)} />
-{/each}
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th class="text-center" scope="col">Код</th>
+      <th class="text-center" scope="col">Номинал</th>
+      <th class="text-center" scope="col">Валюта</th>
+      <th class="text-center" scope="col">Курс ЦБ</th>
+      <th class="text-center" scope="col">Изменения</th>
+      <th class="text-center" scope="col">%</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each paginatedItems as key}
+      <tr>
+        <td class="text-center">{infoAboutCurrency[key]["CharCode"]}</td>
+	<td class="text-center">{infoAboutCurrency[key]["Nominal"]}</td>
+	<td class="text-center name">{infoAboutCurrency[key]["Name"]}</td>
+	<td class="text-center">{infoAboutCurrency[key]["Value"]}</td>
+	<td class="text-center">
+	  <p class={infoAboutCurrency[key]["Changes"] >= 0 ? "green" : "red"}>
+	    {infoAboutCurrency[key]["Changes"] >= 0 ? `+${infoAboutCurrency[key]["Changes"]}` : `${infoAboutCurrency[key]["Changes"]}`}
+	  </p>
+	</td>
+	<td class="text-center">
+	  <p class={infoAboutCurrency[key]["Changes"] >= 0 ? "green" : "red"}>
+	    {infoAboutCurrency[key]["Percent"] >= 0 ? `+${infoAboutCurrency[key]["Percent"]}` : `${infoAboutCurrency[key]["Percent"]}`}%
+	  </p>
+	</td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
 ```
 
 Для пагинации я использовал пакет svelte-paginate. Переменные которые нужны для пагинации:
