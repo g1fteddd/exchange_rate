@@ -13,6 +13,25 @@ https://www.cbr-xml-daily.ru/daily_json.js
 
 ## Документация
 
+Интерфейс для полученных данных:
+```javascript
+interface ICurrency {
+  Changes: number;
+  CharCode: string;
+  ID: string;
+  Name: string;
+  Nominal: number;
+  NumCode: string;
+  Percent: number;
+  Previous: number;
+  Value: number;
+};
+
+interface IGroupCurrency {
+  [key: string]: ICurrency;
+};
+```
+
 Функция округления числа используется, потому что мы работаем с вещественными числами:
 ```javascript
 const roundingNumber = (number: number, numberOfDigits: number = 4): number => {
