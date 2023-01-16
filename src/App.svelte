@@ -3,9 +3,26 @@
     import { paginate, LightPaginationNav } from "svelte-paginate";
     import Currency from "./components/Currency.svelte";
 
-    let infoAboutCurrency = {};
+	interface ICurrency {
+		Changes: number;
+		CharCode: string;
+		ID: string;
+		Name: string;
+		Nominal: number;
+		NumCode: string;
+		Percent: number;
+		Previous: number;
+		Value: number;
+	};
+
+	interface IGroupCurrency {
+		[key: string]: ICurrency
+	}
+
+
+    let infoAboutCurrency: IGroupCurrency = {};
     let infoKeys: string[] = [];
-    let previousInfoAboutCurrency = {};
+    let previousInfoAboutCurrency: IGroupCurrency = {};
     let previousInfoKeys: string[] = [];
 
     // округление числа до X знаков после запятой
@@ -57,6 +74,8 @@
     let currentPage: number = 1;
     let pageSize: number = 5;
     $: paginatedItems = paginate({ items, pageSize, currentPage });
+
+	$: console.log(infoAboutCurrency)
 </script>
 
 <main>
