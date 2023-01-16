@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { paginate, LightPaginationNav } from "svelte-paginate";
-    import Currency from "./components/Currency.svelte";
 
 	interface ICurrency {
 		Changes: number;
